@@ -3,6 +3,8 @@
 #include "glut.h"
 #include<math.h>
 #define PI 3.14159265
+#define P2 PI/2
+#define P3 3*PI/2
 
 float px, py, pdx, pdy, pa;
 
@@ -63,12 +65,32 @@ void drawRays3D(){
         if(ra == 0 || ra == PI){ rx=px; ry=py; dof=8;}
 
         while(dof<8){
-            mx=(int)(rx)>>6; my(int)(ry)>>6; mp=my*mapX+mx;
-            if(mp<mapX*mapY && map[mp]==1){dof=8;}
+            mx=(int)(rx)>>6; my=(int)(ry)>>6; mp=my*mapX+mx;
+            if(mp>0 && mp<mapX*mapY && map[mp]==1){dof=8;}
             else{rx+=xo;ry+=yo;dof+=1;}
         }
         glColor3f(0,1,0);
-        glLineWidth(1);
+        glLineWidth(4);
+        glBegin(GL_LINES);
+        glVertex2i(px,py);
+        glVertex2i(rx,ry);
+        glEnd();
+
+        // vertical
+        dof=0;
+        float nTan=-tan(ra);
+        
+        if(ra>P2 && ra<P3){rx=(((int)px>>6)<<6)-0.0001; ry=(px-rx)*nTan+py; xo=-64; yo=-xo*nTan;}
+        if(ra<P2 || ra>P3){rx=(((int)px>>6)<<6)+64;     ry=(px-rx)*nTan+py; xo= 64; yo=-xo*nTan;}
+        if(ra == 0 || ra == PI){ rx=px; ry=py; dof=8;}
+
+        while(dof<8){
+            mx=(int)(rx)>>6; my=(int)(ry)>>6; mp=my*mapX+mx;
+            if(mp>0 && mp<mapX*mapY && map[mp]==1){dof=8;}
+            else{rx+=xo;ry+=yo;dof+=1;}
+        }
+        glColor3f(1,0,0);
+        glLineWidth(2);
         glBegin(GL_LINES);
         glVertex2i(px,py);
         glVertex2i(rx,ry);
