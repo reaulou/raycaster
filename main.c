@@ -5,6 +5,7 @@
 #define PI 3.14159265
 #define P2 PI/2
 #define P3 3*PI/2
+#define DR 0.0174533
 
 float px, py, pdx, pdy, pa;
 
@@ -58,9 +59,9 @@ float dist(float ax, float ay, float bx, float by, float ang)
 
 void drawRays3D(){
     int r,mx,my,mp,dof; float rx,ry,ra,xo,yo;
-    ra=pa;
+    ra=pa-DR*30; if(ra<0){ra+=2*PI;} if(ra>2*PI){ra-=2*PI;}
 
-    for(r=0;r<1;r++){
+    for(r=0;r<60;r++){
         // horizontal
         dof=0;
         float disH = 1000000, hx=px, hy=py;
@@ -100,6 +101,8 @@ void drawRays3D(){
         glVertex2i(px,py);
         glVertex2i(rx,ry);
         glEnd();
+
+        ra+=DR; if(ra<0){ra+=2*PI;} if(ra>2*PI){ra-=2*PI;}
     }
 }
 
