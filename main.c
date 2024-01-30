@@ -7,6 +7,10 @@
 #define P3 3*PI/2
 #define DR 0.0174533
 
+typedef struct{
+    int w, a, s, d;
+}ButtonKeys; ButtonKeys Keys;
+
 float px, py, pdx, pdy, pa;
 
 void drawPlayer(){
@@ -19,13 +23,12 @@ void drawPlayer(){
     glLineWidth(3);
     glBegin(GL_LINES);
     glVertex2i(px, py);
-    glVertex2i(px+pdx*5, py+pdy*5);
+    glVertex2i(px+pdx, py+pdy);
     glEnd();
 }
 
 int mapX=8, mapY=8, mapS=64;
-int map[]=
-{
+int map[]={
     1,1,1,1,1,1,1,1,
     1,0,0,0,1,0,0,1,
     1,1,1,0,1,1,0,1,
@@ -52,8 +55,7 @@ void drawMap2D(){
     }
 }
 
-float dist(float ax, float ay, float bx, float by, float ang)
-{ 
+float dist(float ax, float ay, float bx, float by, float ang){ 
     return (sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay)));
 }
 
@@ -112,8 +114,13 @@ void drawRays3D(){
     }
 }
 
-void display()
-{
+void display(){
+    if(Keys.a==1){pa-=0.045; if(pa<0){pa+=2*PI;} pdx=cos(pa), pdy=sin(pa);}
+    if(Keys.d==1){pa+=0.045; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa), pdy=sin(pa);}
+    if(Keys.w==1){px+=pdx;py+=pdy;}
+    if(Keys.s==1){px-=pdx;py-=pdy;}
+    glutPostRedisplay();
+
     glClear(GL_COLOR_BUFFER_BIT);
     drawMap2D();
     drawPlayer();
@@ -121,29 +128,43 @@ void display()
     glutSwapBuffers();
 }
 
-void buttons(unsigned char key, int x, int y){
-    if(key=='a'){pa-=0.1; if(pa<0){pa+=2*PI;} pdx=cos(pa)*5, pdy=sin(pa)*5;}
-    if(key=='d'){pa+=0.1; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa)*5, pdy=sin(pa)*5;}
-    if(key=='w'){px+=pdx;py+=pdy;}
-    if(key=='s'){px-=pdx;py-=pdy;}
-    glutPostRedisplay();
-}
-
 void init(){
     glClearColor(0.3,0.3,0.3,0);
     gluOrtho2D(0,1024,512,0);
-    px=300; py=300; pdx=cos(pa)*5, pdy=sin(pa)*5;
+    px=100; py=420; pdx=cos(pa), pdy=sin(pa);
 }
 
-int main(int argc, char** argv)
-{ 
+void ButtonDown(unsigned char key, int x, int y){
+    if(key=='a'){Keys.a=1;}
+    if(key=='d'){Keys.d=1;}
+    if(key=='w'){Keys.w=1;}
+    if(key=='s'){Keys.s=1;}
+    glutPostRedisplay();
+}
+
+void ButtonUp(unsigned char key, int x, int y){
+    if(key=='a'){Keys.a=0;}
+    if(key=='d'){Keys.d=0;}
+    if(key=='w'){Keys.w=0;}
+    if(key=='s'){Keys.s=0;}
+    glutPostRedisplay();
+}
+
+void resize(int w, int h){
+    glutReshapeWindow(1024, 512);
+}
+
+int main(int argc, char** argv){ 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(1024,512);
+    glutInitWindowPosition(200,200);
     glutCreateWindow("Raycaster");
     init();
     glutDisplayFunc(display);
-    glutKeyboardFunc(buttons);
+    glutReshapeFunc(resize);
+    glutKeyboardFunc(ButtonDown);
+    glutKeyboardUpFunc(ButtonUp);
     glutMainLoop();
     return 0;
 }
