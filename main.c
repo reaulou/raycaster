@@ -115,10 +115,12 @@ void drawRays3D(){
 }
 
 void display(){
-    if(Keys.a==1){pa-=0.045; if(pa<0){pa+=2*PI;} pdx=cos(pa), pdy=sin(pa);}
-    if(Keys.d==1){pa+=0.045; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa), pdy=sin(pa);}
-    if(Keys.w==1){px+=pdx;py+=pdy;}
-    if(Keys.s==1){px-=pdx;py-=pdy;}
+    float multiplierRotate = 0.07;
+    float multiplierMove = 0.1;
+    if(Keys.a==1){pa-=0.045*multiplierRotate; if(pa<0){pa+=2*PI;} pdx=cos(pa), pdy=sin(pa);}
+    if(Keys.d==1){pa+=0.045*multiplierRotate; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa), pdy=sin(pa);}
+    if(Keys.w==1){px+=pdx*multiplierMove;py+=pdy*multiplierMove;}
+    if(Keys.s==1){px-=pdx*multiplierMove;py-=pdy*multiplierMove;}
     glutPostRedisplay();
 
     glClear(GL_COLOR_BUFFER_BIT);
