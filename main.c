@@ -115,7 +115,7 @@ void drawRays3D(){
 }
 
 void display(){
-    float multiplierRotate = 0.07;
+    float multiplierRotate = 0.07; // test comment
     float multiplierMove = 0.1;
     if(Keys.a==1){pa-=0.045*multiplierRotate; if(pa<0){pa+=2*PI;} pdx=cos(pa), pdy=sin(pa);}
     if(Keys.d==1){pa+=0.045*multiplierRotate; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa), pdy=sin(pa);}
