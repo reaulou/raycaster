@@ -33,7 +33,7 @@ int map[]={
     1,0,0,0,1,0,0,1,
     1,1,1,0,1,1,0,1,
     1,0,0,0,0,0,0,1,
-    1,0,0,0,0,0,0,1,
+    1,0,0,1,1,1,0,1,
     1,1,0,0,0,0,0,1,
     1,0,0,0,1,0,0,1,
     1,1,1,1,1,1,1,1,
@@ -115,8 +115,8 @@ void drawRays3D(){
 }
 
 void display(){
-    float multiplierRotate = 0.07;
-    float multiplierMove = 0.1;
+    float multiplierRotate = 1;
+    float multiplierMove = 1;
     if(Keys.a==1){pa-=0.045*multiplierRotate; if(pa<0){pa+=2*PI;} pdx=cos(pa), pdy=sin(pa);}
     if(Keys.d==1){pa+=0.045*multiplierRotate; if(pa>2*PI){pa-=2*PI;} pdx=cos(pa), pdy=sin(pa);}
     if(Keys.w==1){px+=pdx*multiplierMove;py+=pdy*multiplierMove;}
